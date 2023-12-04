@@ -28,6 +28,24 @@
   color: #61dafb;
 }
 
+.square {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+.circle {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  background-color: green;
+  border-radius: 50%;
+}
+.submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
