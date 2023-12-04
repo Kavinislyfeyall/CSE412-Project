@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 /*
 function App() {
   return (
@@ -167,14 +167,17 @@ const PRODUCTS = [
 */
 
 function StockIdentifier() {
-  const [portfolioScoreText, setPortfolioScoreTextChange] = useState('');
+  const [portfolioScoreText, setPortfolioScoreTextChange] = useState('-');
+  const [squareColor, setSquareColor] = useState('gray');
   return (
     <div>
       <PortfolioScoreBar
-      portfolioScoreText={portfolioScoreText}/>
+      portfolioScoreText={portfolioScoreText}
+      squareColor={squareColor}/>
       <InputStockBar
       portfolioScoreText={portfolioScoreText}
-      setPortfolioScoreTextChange={setPortfolioScoreTextChange}/>
+      setPortfolioScoreTextChange={setPortfolioScoreTextChange}
+      setSquareColor={setSquareColor}/>
       <StockTable/>
     </div>
   );
@@ -184,24 +187,36 @@ function StockTable() {
 
 }
 
-function PortfolioScoreBar(portfolioScoreText) {
+function PortfolioScoreBar({portfolioScoreText, squareColor}) {
   return (
-    <div class="square">
-      <p class="text">portfolioScoreText</p>
+    <div class="square" style={{ backgroundColor: squareColor }}>
+      <p class="text">{portfolioScoreText}</p>
     </div>
   );
 }
 
-function InputStockBar(portfolioScoreText, setPortfolioScoreTextChange) {
+function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquareColor}) {
   const [stockText, setStockTextChange] = useState('');
   const [dateText, setDateTextChange] = useState('');
   const [priceText, setPriceTextChange] = useState('');
   const [quantityText, setQuantityTextChange] = useState('');
 
+  // useEffect(() => {
+  //   // This block will run after the component is rendered and the state is updated
+  //   console.log('Updated portfolioScoreText:', portfolioScoreText);
+  // }, [portfolioScoreText]); // useEffect will run whenever portfolioScoreText changes
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setPortfolioScoreTextChange("52");
-
+    const score = "52";
+    setPortfolioScoreTextChange(score);
+    if(parseInt(score, 10) > 70){
+      setSquareColor('green');
+    }else if(parseInt(score, 10) < 70 && parseInt(score, 10) > 50){
+      setSquareColor('orange');
+    }else{
+      setSquareColor('red');
+    }
   }
 
   return (
