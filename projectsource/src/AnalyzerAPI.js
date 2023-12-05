@@ -5,7 +5,7 @@ class AnalyzerAPI {
     portfolioArray;
     async getPortfolioInformation () {
         //take the array return value and set to portfolio array
-        this.portfolioArray = await axios.get('http://localhost:8763/getUH');
+        this.portfolioArray = await axios.get('http://localhost:8763/getUH').data;;
     }
     async analyzePortfolio() {
         //get protfolio return
@@ -19,7 +19,7 @@ class AnalyzerAPI {
             var pricePurchased = stock[2];
             totalExpendend += volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
+            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0]).data;
             var priceValued = currentStock[2];
             totalValue += volumn * priceValued;
         }
@@ -36,8 +36,7 @@ class AnalyzerAPI {
             var pricePurchased = stock[2];
             var expended = volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
-            var priceValued = currentStock[2];
+            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0]).data;
             var value = volumn * priceValued;
             
             var stockRateOfReturn = value / expended - 1;
