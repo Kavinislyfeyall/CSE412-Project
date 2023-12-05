@@ -13,7 +13,7 @@ class AnalyzerAPI {
         var totalExpendend = 0;
         var totalValue = 0;
         var totalVolumn = 0;
-        for(stock in this.portfolioArray) {
+        for(var stock in this.portfolioArray) {
             var volumn = stock[3];
             totalVolumn += volumn;
             var pricePurchased = stock[2];
@@ -31,10 +31,10 @@ class AnalyzerAPI {
         //get portfolio beta
         var marketRateOfReturn = 0.1013;
         var betaOfPortfolio;
-        for(stock in this.portfolioArray) {
+        for(var stock in this.portfolioArray) {
             var volumn = stock[3];
             var pricePurchased = stock[2];
-            var expendend = volumn * pricePurchased;
+            var expended = volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
             var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
             var priceValued = currentStock[2];
@@ -49,8 +49,7 @@ class AnalyzerAPI {
         var treynorRatio = (portfolioReturn - riskFreeRate) / betaOfPortfolio;
         return treynorRatio;
     }
+    
 }
 
-module.exports = {
-    analyzePortfolio
-}
+module.exports = new AnalyzerAPI();
