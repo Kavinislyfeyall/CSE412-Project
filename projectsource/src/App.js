@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
+const API = require('./AnalyzerAPI.js');
+const axios = require('axios');
 
 function StockIdentifier() {
   const [portfolioScoreText, setPortfolioScoreTextChange] = useState('-');
@@ -43,11 +45,18 @@ function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquar
   //   console.log('Updated portfolioScoreText:', portfolioScoreText);
   // }, [portfolioScoreText]); // useEffect will run whenever portfolioScoreText changes
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    if(dateText == "KILL")
+    {
+      
+      return;
+    }
     const newStock = {name: stockText , date: dateText, price: priceText, amount: quantityText};
     setStockListChange([...StockList, newStock]);
     event.preventDefault();
-    const score = Math.floor(Math.random() * 100) + 1;
+    const dateText2 = encodeURIComponent(dateText).replace(/\//g, '%2F');
+    await axios.get('http://localhost:8763/' + stockText + '/' + dateText2 + '/' + priceText + '/' + quantityText);
+    const score = API.analyzePortfolio();
     setPortfolioScoreTextChange(score);
     if(parseInt(score, 10) > 70){
       setSquareColor('green');
