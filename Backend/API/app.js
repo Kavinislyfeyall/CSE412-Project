@@ -1,5 +1,5 @@
 const express = require('express');
-const { getMarketHistory, getStock, getUserHistory, InsertUserHistory, DelUserHistory } = require('../DBQueries/StockMarketQueries');
+const { getMarketHistory, getStock, getUserHistory, InsertUserHistory, DelUserHistory, DelAllUserHistory } = require('../DBQueries/StockMarketQueries');
 console.log( require('../DBQueries/StockMarketQueries'))
 
 
@@ -104,6 +104,19 @@ app1.get('/DelUH/:p1/:p2', async (req, res) => {
   }
 });
 
+app1.get('/DelAllUH', async (req, res) => {
+  //res.send('Api is working2');
+  try {
+    
+    const ret = await DelAllUserHistory() ;
+
+    const dataArray = ret.map(record => Object.values(record));
+    res.send(dataArray);
+   // res.send('Api is working2');
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 // Start the server
