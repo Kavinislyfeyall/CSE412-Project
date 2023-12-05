@@ -45,7 +45,7 @@ app1.get('/getStock/:param1', async (req, res) => {
   }
 });
 
-app1.get('/getUH/', async (req, res) => {
+app1.get('/getUH', async (req, res) => {
   //res.send('Api is working2');
   try {
     //const abbrv = 'AAL'; //default
