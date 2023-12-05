@@ -1,6 +1,6 @@
 const express = require('express');
-const { getMarketHistory, getStock, getUserHistory, InsertUserHistory, DelUserHistory, DelAllUserHistory } = require('../DBQueries/StockMarketQueries');
-console.log( require('../DBQueries/StockMarketQueries'))
+const { getMarketHistory, getStock, getUserHistory, InsertUserHistory, DelUserHistory, DelAllUserHistory } = require('./StockMarketQueries');
+console.log( require('./StockMarketQueries'))
 
 
 

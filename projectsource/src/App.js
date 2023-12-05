@@ -1,8 +1,13 @@
 import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 import { useState, useEffect } from 'react';
-const API = require('./AnalyzerAPI.js');
-const axios = require('axios');
+//const API = require('./AnalyzerAPI.js');
+import {analyzePortfolio} from './AnalyzerAPI';
+const fetch = require('node-fetch');
+
+
+//const axios = require('axios');
 
 function StockIdentifier() {
   const [portfolioScoreText, setPortfolioScoreTextChange] = useState('-');
@@ -37,7 +42,7 @@ function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquar
   const [dateText, setDateTextChange] = useState('');
   const [priceText, setPriceTextChange] = useState('');
   const [quantityText, setQuantityTextChange] = useState('');
-  const [totalProfitText, setTotalProfitTextChange] = useState('');
+  const [totalProfitText, setTotalProfitTextChange] = useState('0');
   const [StockList, setStockListChange] = useState([]);
   //const rows = [];
   // useEffect(() => {
@@ -45,19 +50,54 @@ function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquar
   //   console.log('Updated portfolioScoreText:', portfolioScoreText);
   // }, [portfolioScoreText]); // useEffect will run whenever portfolioScoreText changes
 
+  //OVERRIDE DELETE TO REMOVE ALL ELEMENTS FROM DATABASE 
   const handleSubmit = async (event) => {
-    if(dateText == "KILL")
+    if(dateText === "KILL")
     {
-      
+      await fetch('http://localhost:8763/DelAllUH')
+    .then(response => {
+      // Check if the request was successful (status code in the range 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Parse the JSON in the response
+      return response.json();
+    })
+    .then(data => {
+      // Process the data
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Fetch error:', error.message);
+    });
       return;
-    }
+    } //end if
+
     const newStock = {name: stockText , date: dateText, price: priceText, amount: quantityText};
     setStockListChange([...StockList, newStock]);
     event.preventDefault();
     const dateText2 = encodeURIComponent(dateText).replace(/\//g, '%2F');
-    await axios.get('http://localhost:8763/' + stockText + '/' + dateText2 + '/' + priceText + '/' + quantityText);
-    const score = API.analyzePortfolio();
-    setPortfolioScoreTextChange(score);
+    await fetch('http://localhost:8763/InsertUH/' + stockText + '/' + dateText2 + '/' + priceText + '/' + quantityText)
+    .then(response => {
+      // Check if the request was successful (status code in the range 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Parse the JSON in the response
+      return response.json();
+    })
+    .then(data => {
+      // Process the data
+      //setPortfolioScoreTextChange("hello");
+    })
+    .catch(error => {
+      console.error('Fetch error:', error.message);
+    });
+    //console.log("hello");
+    //let score = Math.floor(Math.random() * (100 - 0) + 0);
+    let score = analyzePortfolio();
     if(parseInt(score, 10) > 70){
       setSquareColor('green');
     }else if(parseInt(score, 10) < 70 && parseInt(score, 10) > 50){
@@ -65,6 +105,28 @@ function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquar
     }else{
       setSquareColor('red');
     }
+    setPortfolioScoreTextChange(score/100);
+
+    let num;
+    await fetch('http://localhost:8763/getStock' + stockText)
+    .then(response => {
+      // Check if the request was successful (status code in the range 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Parse the JSON in the response
+      return response.json();
+    })
+    .then(data => {
+      num = data;
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Fetch error:', error.message);
+    });
+    num = analyzePortfolio();
+    setTotalProfitTextChange(num);
   }
 
   return (
@@ -99,7 +161,7 @@ function InputStockBar({portfolioScoreText, setPortfolioScoreTextChange,setSquar
         </button>
       </form>
       <div>
-        <p id="ProfitText"class="text">Total Profit: {totalProfitText}</p>
+        <p id="ProfitText"class="text">Total Profit: ${totalProfitText}</p>
       </div>
       <table className="tableContainer">
         <thead>

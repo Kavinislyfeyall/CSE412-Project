@@ -1,13 +1,16 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 //const { getUserHistory, getStock} = require('../../Backend/API/app');
 
-class AnalyzerAPI {
-    portfolioArray;
-    async getPortfolioInformation () {
-        //take the array return value and set to portfolio array
-        this.portfolioArray = await axios.get('http://localhost:8763/getUH').data;;
+    var portfolioArray;
+    async function getPortfolioInformation () {
+        await fetch('http://localhost:8763/getUH').then(response => {
+            return response.json();
+        }).then(data => {
+            this.portfolioArray = data;
+            console.log(this.portfolioArray)
+        })
     }
-    async analyzePortfolio() {
+    async function analyzePortfolio() {
         //get protfolio return
         this.getPortfolioInformation();
         var totalExpendend = 0;
@@ -19,7 +22,13 @@ class AnalyzerAPI {
             var pricePurchased = stock[2];
             totalExpendend += volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0]).data;
+            var currentStock;
+            await fetch('http://localhost:8763/getStock/' + stock[0]).then(response => {
+                return response.json();
+            }).then(data => {
+                currentStock = data;
+            })
+            
             var priceValued = currentStock[2];
             totalValue += volumn * priceValued;
         }
@@ -36,9 +45,16 @@ class AnalyzerAPI {
             var pricePurchased = stock[2];
             var expended = volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0]).data;
-            var value = volumn * priceValued;
+            var currentStock;
+            await fetch('http://localhost:8763/getStock/' + stock[0]).then(response => {
+                return response.json();
+            }).then(data => {
+                currentStock = data;
+            })
             
+            var priceValued = currentStock[2];
+            var value = volumn * priceValued;
+
             var stockRateOfReturn = value / expended - 1;
             var stockBeta = (stockRateOfReturn - riskFreeRate) / (marketRateOfReturn - riskFreeRate);
             var stockWeight = volumn / totalVolumn;
@@ -49,6 +65,8 @@ class AnalyzerAPI {
         return treynorRatio;
     }
     
-}
 
-module.exports = new AnalyzerAPI();
+
+module.exports = {
+    analyzePortfolio
+};
