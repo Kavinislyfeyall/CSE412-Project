@@ -3,9 +3,6 @@ const axios = require('axios');
 
 class AnalyzerAPI {
     portfolioArray;
-    constructor() {
-        //take the array return value and set to portfolio array
-    }
     async getPortfolioInformation () {
         //take the array return value and set to portfolio array
         this.portfolioArray = await axios.get('http://localhost:8763/getUH');
@@ -13,43 +10,43 @@ class AnalyzerAPI {
     async analyzePortfolio() {
         //get protfolio return
         this.getPortfolioInformation();
-        totalExpendend = 0;
-        totalValue = 0;
-        totalVolumn = 0;
+        var totalExpendend = 0;
+        var totalValue = 0;
+        var totalVolumn = 0;
         for(stock in this.portfolioArray) {
-            volumn = stock[3];
+            var volumn = stock[3];
             totalVolumn += volumn;
-            pricePurchased = stock[2];
+            var pricePurchased = stock[2];
             totalExpendend += volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
-            priceValued = currentStock[2];
+            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
+            var priceValued = currentStock[2];
             totalValue += volumn * priceValued;
         }
-        portfolioReturn = totalValue / totalExpendend - 1;
+        var portfolioReturn = totalValue / totalExpendend - 1;
 
         //get risk free rate
-        riskFreeRate = 0.0192;
+        var riskFreeRate = 0.0192;
 
         //get portfolio beta
-        marketRateOfReturn = 0.1013;
-        betaOfPortfolio;
+        var marketRateOfReturn = 0.1013;
+        var betaOfPortfolio;
         for(stock in this.portfolioArray) {
-            volumn = stock[3];
-            pricePurchased = stock[2];
-            expendend = volumn * pricePurchased;
+            var volumn = stock[3];
+            var pricePurchased = stock[2];
+            var expendend = volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
-            priceValued = currentStock[2];
-            value = volumn * priceValued;
+            var currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
+            var priceValued = currentStock[2];
+            var value = volumn * priceValued;
             
-            stockRateOfReturn = value / expended - 1;
-            stockBeta = (stockRateOfReturn - riskFreeRate) / (marketRateOfReturn - riskFreeRate);
-            stockWeight = volumn / totalVolumn;
+            var stockRateOfReturn = value / expended - 1;
+            var stockBeta = (stockRateOfReturn - riskFreeRate) / (marketRateOfReturn - riskFreeRate);
+            var stockWeight = volumn / totalVolumn;
             betaOfPortfolio += stockBeta * stockWeight;
         }
 
-        treynorRatio = (portfolioReturn - riskFreeRate) / betaOfPortfolio;
+        var treynorRatio = (portfolioReturn - riskFreeRate) / betaOfPortfolio;
         return treynorRatio;
     }
 }
