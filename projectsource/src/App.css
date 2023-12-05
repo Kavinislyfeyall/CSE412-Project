@@ -12,6 +12,18 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #e0e0e0;
+  height: 100vh; /* Set the height to the viewport height */
+}
+.background {
+  flex: 1;
+  height: 100%; /* 100% height of the body */
+  background-color: #ffffff; /* Set your desired background color */
+}
 
 .App-header {
   background-color: #282c34;
@@ -28,18 +40,70 @@
   color: #61dafb;
 }
 
+/* .header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 720px;
+  height: 150px;
+  background-color: rgb(255, 255, 255);
+  margin-left: auto;
+  margin-right: 25%;
+} */
 .square {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
-  background-color: red;
+  width: 150px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: 1%;
+  
 }
 .text {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+#TitleText {
+  font-size: 40px; /* Adjust the font size as needed */
+  color: #000;
+  margin-left: 1%;
+  /* margin-top: auto; */
+}
+#ExplainText {
+  font-size: 18px; /* Adjust the font size as needed */
+  color: #000;
+  margin-left: 2%;
+}
+#ScoreText {
   font-size: 52px;
 }
+#ProfitText {
+  margin-left: 1%;
+}
 
+.inputBar {
+  display: flex;
+  flex-direction: column; /* Align children horizontally */
+  align-items: center;
+  /* justify-content: center; */
+  /* text-align: center; */
+}
+.formContainer {
+  display: flex;
+  flex-direction: row; /* Align children horizontally */
+}
+
+.inputContainer {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+.tableContainer {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
 .circle {
   display: flex;
   width: 100px;
@@ -48,8 +112,15 @@
   border-radius: 50%;
 }
 .submit-button {
-  padding: 10px 20px;
-  font-size: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  /* padding: 5px 10px; */
+  /* font-size: 16px; */
+}
+.table {
+  border-collapse: separate;
+  border-spacing: 50 50px;
 }
 
 @keyframes App-logo-spin {
