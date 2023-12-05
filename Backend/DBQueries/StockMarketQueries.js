@@ -96,6 +96,35 @@ async function getMarketHistory(limit = 20) {
     }
   }
   
+  //Delete All of  user history
+   async function DelAllUserHistory(abbv, date) {
+    const dbClient  = new Client ({
+      user: 'abhinavkoyyalamudi',
+      host: 'localhost',
+      database: 'abhinavkoyyalamudi',
+      port: 8889,
+      // Might have to add a password, dk if we have 1 set
+    }); 
+
+
+    try {
+      console.log('db client is running');
+      await dbClient.connect();
+      const result = await dbClient.query('DELETE FROM userHistory');
+      console.log(result.rows);
+
+      await dbClient.end();
+      return result.rows;
+    } catch (error) {
+      console.log(error.message);
+      console.log('db client is not running');
+      await dbClient.end();
+      throw new Error('Error fetching users: ' + error.message);
+    } finally {
+      await dbClient.end();
+    }
+  }
+  
   
 
   //Get all of user history table
@@ -160,5 +189,6 @@ async function getMarketHistory(limit = 20) {
     getUserHistory,
     getStock,
     InsertUserHistory,
-    DelUserHistory
+    DelUserHistory,
+    DelAllUserHistory
   };
