@@ -1,4 +1,5 @@
 const axios = require('axios');
+//const { getUserHistory, getStock} = require('../../Backend/API/app');
 
 class AnalyzerAPI {
     portfolioArray;
@@ -51,4 +52,8 @@ class AnalyzerAPI {
         treynorRatio = (portfolioReturn - riskFreeRate) / betaOfPortfolio;
         return treynorRatio;
     }
+}
+
+module.exports = {
+    analyzePortfolio
 }
