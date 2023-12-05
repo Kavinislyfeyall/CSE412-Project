@@ -1,14 +1,17 @@
+const axios = require('axios');
+
 class AnalyzerAPI {
     portfolioArray;
     constructor() {
         //take the array return value and set to portfolio array
     }
-    getPortfolioInformation () {
+    async getPortfolioInformation () {
         //take the array return value and set to portfolio array
-        return this.portfolioArray;
+        this.portfolioArray = await axios.get('http://localhost:8763/getUH');
     }
-    analyzePortfolio() {
+    async analyzePortfolio() {
         //get protfolio return
+        this.getPortfolioInformation();
         totalExpendend = 0;
         totalValue = 0;
         totalVolumn = 0;
@@ -18,7 +21,7 @@ class AnalyzerAPI {
             pricePurchased = stock[2];
             totalExpendend += volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            currentStock;
+            currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
             priceValued = currentStock[2];
             totalValue += volumn * priceValued;
         }
@@ -35,7 +38,7 @@ class AnalyzerAPI {
             pricePurchased = stock[2];
             expendend = volumn * pricePurchased;
             //get current stocks most recent value (2/7/2018)
-            currentStock;
+            currentStock = await axios.get('http://localhost:8763/getStock/'+stock[0])
             priceValued = currentStock[2];
             value = volumn * priceValued;
             
